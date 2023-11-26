@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DogApi.Controllers
 {
@@ -16,11 +17,21 @@ namespace DogApi.Controllers
             _query = new QueryDog(_context);
         }
 
+
+
+
         [HttpGet]
         public ActionResult<List<APIDog>> GetDogs()
         {
             return Ok(_query.getDogs());
         }
+
+        [HttpGet("breeds")]
+        public ActionResult<List<APIDogBreeds>> GetBreeds()
+        {
+            return Ok(_query.getBreeds());
+        }
+
 
         [HttpGet("{id}")]
         public ActionResult<APIDogDetail> GetDog(int id)
@@ -32,5 +43,20 @@ namespace DogApi.Controllers
             }
             return Ok(api);
         }
+
+
+
+        [HttpPost("dog")]
+        public ActionResult<int> SaveDog(DTODog dto)
+        {
+            int retval = _query.saveDog(dto);
+            if(retval < 1) 
+            {
+                return BadRequest(retval);
+            }
+            return Ok(retval);
+        }
+
     }
+   
 }

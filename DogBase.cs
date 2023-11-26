@@ -8,10 +8,15 @@ namespace DogApi
         public bool IsActive { get; set; } = true;
 
     }
+
+    public class BaseDogBreed : BaseData
+    {
+        [MaxLength(50)]public string Name { get; set; } = string.Empty;
+    }
     public class BaseDog : BaseData
     {
         [MaxLength(50)]public string Name { get; set; } = string.Empty;
-        [MaxLength(50)] public string Breed { get; set; } = string.Empty;
+        public int BreedID { get; set; }
         public DateTime Birthday { get; set; }
         public bool IsMale { get; set; }
         public int Weight { get; set; }
@@ -20,6 +25,7 @@ namespace DogApi
         public int PhotoID { get; set; }
         [MaxLength(500)] public string Bio { get; set; } = string.Empty;
     }
+
 
     public class BaseContact : BaseData
     {
@@ -41,6 +47,12 @@ namespace DogApi
     public class BaseOwner : BaseData
     {
         public int ContactID { get; set; }
+    }
+
+    public class BasePicture : BaseData
+    {
+        public Guid unique_ID { get; set; }
+        public int type_ID { get; set; }
     }
 
     public class BaseTrainer : BaseData

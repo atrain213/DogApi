@@ -2,9 +2,16 @@
 {
     public class Dog : BaseDog
     {
+        public DogBreed Breed { get; set; } = new();
+        public Picture Photo { get; set; } = new();
         public List<Training> Trainings { get; set; } = new();
         public List<DogOwner> Owners { get; set; } = new();
         public List<DogTrainer> Trainers { get; set; } = new();
+    }
+
+    public class DogBreed: BaseDogBreed
+    {
+        public List<Dog?> Dogs { get;set; } = new();
     }
 
     public class Contact: BaseContact
@@ -26,6 +33,11 @@
     {
         public List<DogOwner> Owners {get; set; } = new();
         public Contact Contact { get; set; } = new();
+    }
+
+    public class Picture : BasePicture
+    {
+        public List<Dog> Dogs { get; set; } = new();
     }
     public class Trainer : BaseTrainer
     {
@@ -62,5 +74,6 @@
         public TrickCategory TrickCategory { get; set; }= new();
 
     }
+
 
 }

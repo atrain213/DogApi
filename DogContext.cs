@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Diagnostics;
 
 namespace DogApi
 {
@@ -13,12 +11,15 @@ namespace DogApi
         public DbSet<DogTrainer> DogTrainers  { get; set; }
         public DbSet<Dog> Dogs  { get; set; }
         public DbSet<Owner> Owners  { get; set; }
+        public DbSet<Picture> Pictures { get; set; }
         public DbSet<Trainer> Trainers  { get; set; }
         public DbSet<TrainingTrick> TrainingTricks  { get; set; }
         public DbSet<Training> Trainings  { get; set; }
         public DbSet<TrickCategory> TrickCategories  { get; set; }
         public DbSet<TrickIcon> TrickIcons  { get; set; }
         public DbSet<Trick> Tricks  { get; set; }
+        public DbSet<DogBreed> DogBreeds { get; set; }
+        
 
         public DogContext(DbContextOptions<DogContext> options) : base(options) 
         {
@@ -40,12 +41,14 @@ namespace DogApi
             modelBuilder.Entity<DogTrainer>().ToTable("Dog Trainer");
             modelBuilder.Entity<Dog>().ToTable("Dog");
             modelBuilder.Entity<Owner>().ToTable("Owner");
+            modelBuilder.Entity<Picture>().ToTable("Picture");
             modelBuilder.Entity<Trainer>().ToTable("Trainer");
             modelBuilder.Entity<TrainingTrick>().ToTable("Training Trick");
             modelBuilder.Entity<Training>().ToTable("Training");
             modelBuilder.Entity<TrickCategory>().ToTable("Trick Category");
             modelBuilder.Entity<TrickIcon>().ToTable("Trick Icon");
             modelBuilder.Entity<Trick>().ToTable("Trick");
+            modelBuilder.Entity<DogBreed>().ToTable("Dog Breeds");
 
 
         }
