@@ -33,6 +33,25 @@ namespace DogApi.Controllers
         }
 
 
+        [HttpGet("trainer/{id}")]
+        public ActionResult<List<APIDogDetail>> GetDogByTrainer(int id)
+        {
+            return Ok(_query.getDogbyTrainer(id));
+        }
+
+        [HttpGet("trainer/lastdog/{id}")]
+        public ActionResult<int> GetLastDogForTrainer(int id)
+        {
+            return Ok(_query.getLastDogforTrainer(id));
+        }
+
+        [HttpGet("owner/{id}")]
+        public ActionResult<List<APIDogDetail>> GetDogByOwner(int id)
+        {
+            return Ok(_query.getDogbyOwner(id));
+        }
+
+
         [HttpGet("{id}")]
         public ActionResult<APIDogDetail> GetDog(int id)
         {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DogApi
 {
@@ -41,7 +42,71 @@ namespace DogApi
 
                 }).FirstOrDefault();
         }
-         
+
+        public List<APIDogDetail> getDogbyTrainer(int id)
+        {
+            return _context.DogTrainers.Where(w => w.TrainerID == id)
+                .Select(s => new APIDogDetail
+                {
+
+
+                    ID = s.Dog.ID,
+                    Name = s.Dog.Name,
+                    Birthday = s.Dog.Birthday,
+                    Breed = s.Dog.Breed.Name,
+                    Bio = s.Dog.Bio,
+
+                    Sex = s.Dog.IsMale ? "Male" : "Female",
+                    Weight = s.Dog.Weight,
+                    Owners = s.Dog.Owners.Where(w => w.IsActive)
+                                        .Select(x => new APIContact { ID = x.Owner.Contact.ID, Name = x.Owner.Contact.First + " " + x.Owner.Contact.Last })
+                                        .ToList(),
+                    Trainers = s.Dog.Trainers.Where(w => w.IsActive)
+                                        .Select(x => new APIContact { ID = x.Trainer.ContactID, Name = x.Trainer.Contact.First + " " + x.Trainer.Contact.Last })
+                                        .ToList()
+
+                })
+                .OrderBy(o => o.Name)
+                .ThenBy(o => o.Breed)
+                .ToList();
+        }
+
+        public int getLastDogforTrainer(int id)
+        {
+            return _context.Trainings.Where(w => w.TrainerID == id)
+                .OrderByDescending(o => o.Date)
+                .Select(s => s.DogID)
+                .FirstOrDefault();
+        }
+
+        public List<APIDogDetail> getDogbyOwner(int id)
+        {
+            return _context.DogOwners.Where(w => w.OwnerID == id)
+                .Select(s => new APIDogDetail
+                {
+
+
+                    ID = s.Dog.ID,
+                    Name = s.Dog.Name,
+                    Birthday = s.Dog.Birthday,
+                    Breed = s.Dog.Breed.Name,
+                    Bio = s.Dog.Bio,
+
+                    Sex = s.Dog.IsMale ? "Male" : "Female",
+                    Weight = s.Dog.Weight,
+                    Owners = s.Dog.Owners.Where(w => w.IsActive)
+                                        .Select(x => new APIContact { ID = x.Owner.Contact.ID, Name = x.Owner.Contact.First + " " + x.Owner.Contact.Last })
+                                        .ToList(),
+                    Trainers = s.Dog.Trainers.Where(w => w.IsActive)
+                                        .Select(x => new APIContact { ID = x.Trainer.ContactID, Name = x.Trainer.Contact.First + " " + x.Trainer.Contact.Last })
+                                        .ToList()
+
+                })
+                .OrderBy(o => o.Name)
+                .ThenBy(o => o.Breed)
+                .ToList();
+        }
+
         public List<APIDogBreeds> getBreeds()
         {
             return _context.DogBreeds.Where(w => w.IsActive)
