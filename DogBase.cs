@@ -51,6 +51,7 @@ namespace DogApi
 
     public class BasePicture : BaseData
     {
+        public string Name { get; set; } = string.Empty;
         public Guid unique_ID { get; set; }
         public int type_ID { get; set; }
     }

@@ -63,6 +63,17 @@ namespace DogApi.Controllers
             return Ok(api);
         }
 
+        [HttpGet("picture/{id}")]
+        public ActionResult<APIPicture> GetPicture(int id)
+        {
+            APIPicture? api = _query.getPicture(id);
+            if(api == null)
+            {
+                return NotFound(); 
+            }
+            return Ok(api);
+        }
+
 
 
         [HttpPost("dog")]
@@ -70,6 +81,17 @@ namespace DogApi.Controllers
         {
             int retval = _query.saveDog(dto);
             if(retval < 1) 
+            {
+                return BadRequest(retval);
+            }
+            return Ok(retval);
+        }
+
+        [HttpPost("picture")]
+        public ActionResult<int> SavePicture(DTOPicture dto)
+        {
+            int retval = _query.savePicture(dto);
+            if (retval < 1)
             {
                 return BadRequest(retval);
             }

@@ -30,7 +30,8 @@ namespace DogApi
                     Birthday = s.Birthday,
                     Breed = s.Breed.Name,
                     Bio = s.Bio,
-                                               
+                    Photo = s.Photo.unique_ID.ToString() +(s.Photo.type_ID == 1? ".png": ".jpg"),
+                    PhotoID = s.PhotoID,                                               
                     Sex = s.IsMale ? "Male" : "Female" ,
                     Weight = s.Weight,
                     Owners = s.Owners.Where(w => w.IsActive)
@@ -55,7 +56,8 @@ namespace DogApi
                     Birthday = s.Dog.Birthday,
                     Breed = s.Dog.Breed.Name,
                     Bio = s.Dog.Bio,
-
+                    Photo = s.Dog.Photo.unique_ID.ToString() + (s.Dog.Photo.type_ID == 1 ? ".png" : ".jpg"),
+                    PhotoID = s.Dog.PhotoID,
                     Sex = s.Dog.IsMale ? "Male" : "Female",
                     Weight = s.Dog.Weight,
                     Owners = s.Dog.Owners.Where(w => w.IsActive)
@@ -91,7 +93,8 @@ namespace DogApi
                     Birthday = s.Dog.Birthday,
                     Breed = s.Dog.Breed.Name,
                     Bio = s.Dog.Bio,
-
+                    Photo = s.Dog.Photo.unique_ID.ToString() + (s.Dog.Photo.type_ID == 1 ? ".png" : ".jpg"),
+                    PhotoID = s.Dog.PhotoID,
                     Sex = s.Dog.IsMale ? "Male" : "Female",
                     Weight = s.Dog.Weight,
                     Owners = s.Dog.Owners.Where(w => w.IsActive)
@@ -113,6 +116,13 @@ namespace DogApi
                 .Select(s => new APIDogBreeds { ID = s.ID, Name = s.Name })
                 .OrderBy(o => o.Name)
                 .ToList();
+        }
+
+        public APIPicture? getPicture(int ID)
+        {
+            return _context.Pictures.Where(w => w.ID == ID)
+                    .Select(s => new APIPicture { ID = s.ID, Name = s.Name, type_ID = s.type_ID, unique_ID = s.unique_ID})
+                    .FirstOrDefault();
         }
 
         public int saveDog(DTODog dto)
@@ -149,6 +159,33 @@ namespace DogApi
             }
             _context.SaveChanges();
             return dog.ID;
+
+        }
+
+        public int savePicture(DTOPicture dto)
+        {
+            
+            Picture? pic;
+            if (dto.ID > 0)
+            {
+                pic = _context.Pictures.FirstOrDefault(w => w.ID == dto.ID);
+                if (pic == null)
+                {
+                    return -2;
+                }
+            }
+            else
+            {
+                pic = new() { unique_ID = Guid.NewGuid()};
+            }
+            pic.Name = dto.Name;
+            pic.type_ID = dto.type_ID;
+            if (dto.ID == 0)
+            {
+                _context.Add(pic);
+            }
+            _context.SaveChanges();
+            return pic.ID;
 
         }
     }
