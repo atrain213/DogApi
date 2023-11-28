@@ -16,20 +16,19 @@ namespace DogApi
     public class APIDogDetail
     {
         public int ID { get; set; }
-        public string Name { get; set; }= string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         public string Breed { get; set; } = string.Empty;
 
-        public DateTime Birthday { get; set; }
+        public DateTime Birthday { get; set; } = new(2020, 1, 1);
 
         public string Sex { get; set; } = "Male";
 
-        public int Weight {  get; set; }
+        public int Weight { get; set; }
 
         public string Bio { get; set; } = string.Empty;
 
         public string Photo { get; set; } = "00000000-0000-0000-0000-000000000000.png";
-
         public int PhotoID { get; set; } = 1;
 
         public List<APIContact> Owners { get; set; } = new();
@@ -40,6 +39,10 @@ namespace DogApi
     {
         public int ID { get; set; }
         public string Name { get; set; } = string.Empty;
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public class APIPicture
