@@ -18,6 +18,7 @@ namespace DogApi
         public DbSet<TrickCategory> TrickCategories  { get; set; }
         public DbSet<TrickIcon> TrickIcons  { get; set; }
         public DbSet<Trick> Tricks  { get; set; }
+        public DbSet<DogTrick> DogTricks { get; set; }
         public DbSet<DogBreed> DogBreeds { get; set; }
         
 
@@ -48,6 +49,7 @@ namespace DogApi
             modelBuilder.Entity<TrickCategory>().ToTable("Trick Category");
             modelBuilder.Entity<TrickIcon>().ToTable("Trick Icon");
             modelBuilder.Entity<Trick>().ToTable("Trick");
+            modelBuilder.Entity<DogTrick>().ToTable("Dog Trick");
             modelBuilder.Entity<DogBreed>().ToTable("Dog Breeds");
 
 

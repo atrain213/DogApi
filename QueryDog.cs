@@ -125,6 +125,64 @@ namespace DogApi
                     .FirstOrDefault();
         }
 
+        public List<APITrick> getTricks()
+        {
+            return _context.Tricks.Where(w => w.IsActive)
+                    .OrderBy(o => o.Name)
+                    .Select(s => new APITrick 
+                    {
+                        ID = s.ID,
+                        Category = s.Category.Name,
+                        Color = s.Category.Color,
+                        IconFileName = s.Category.Icon.Icon.unique_ID.ToString().ToLower()+ (s.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
+                        Name = s.Name,
+                        Proficiency = 1.0
+                    }).ToList();
+        }
+
+        public List<APITrick> getTricksByDog(int ID)
+        {
+            return _context.DogTricks.Where(w => w.DogID == ID)
+                    .Select(s => new APITrick
+                    {
+                        ID = s.ID,
+                        Category = s.Trick.Category.Name,
+                        Color = s.Trick.Category.Color,
+                        IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
+                        Name = s.Trick.Name,
+                        Proficiency = ((double)s.Proficiency/ (double)s.ProficiencyScale)
+                    }).ToList();
+        }
+
+        public APITrickDetail? getTrickDetailbyID(int ID)
+        {
+            return _context.DogTricks.Where(w => w.ID == ID)
+                    .Select(s => new APITrickDetail
+                    {
+                        ID = s.TrickID,
+                        VerbalCue = s.VerbalCue,
+                        VerbalRelease = s.VerbalRelease,
+                        VisualCue = s.VisualCue,
+                        VisualRelease = s.VisualRelease,
+                        Category = s.Trick.Category.Name,
+                        Color = s.Trick.Category.Color,
+                        Comment = s.Comment,
+                        Name = s.Trick.Name,
+                        Proficiency = s.Proficiency,
+                        IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
+                        Trainings = s.TrainingTricks.Where(w => w.IsActive).Select(x => new APITraining
+                                                                                                {
+                        //                                                                            ID = x.ID,
+                        //                                                                            Date = x.Training.Date,
+                        //                                                                            Comment = x.Training.Comment,
+                        //                                                                            ProficiencyCount = x.ProficiencyCount,
+                        //                                                                            Repetitions = x.Repetitions,
+                        //                                                                            Name = x.Training.Trainer.Contact.First + " " + x.Training.Trainer.Contact.Last
+                                                                                                }).ToList()
+
+                    }).FirstOrDefault();
+        }
+
         public int saveDog(DTODog dto)
         {
             DogBreed? breed = _context.DogBreeds.FirstOrDefault(w => w.ID == dto.BreedID);

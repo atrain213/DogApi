@@ -64,11 +64,17 @@ namespace DogApi
 
     }
 
-    public class BaseTrick: BaseData
+    public class BaseTrick : BaseData
+    {
+        public string Name { get; set; } = string.Empty;
+        public int CategoryID { get; set; }
+
+    }
+
+    public class BaseDogTrick: BaseData
     {
         public int DogID { get; set; }
-        public int TrainerID { get; set; }
-        public int CategoryID { get; set; }
+        public int TrickID { get; set; }
         public int Proficiency { get; set; }
         public int ProficiencyScale { get; set; }
         [MaxLength(50)] public string VerbalCue { get; set; } = string.Empty;
@@ -88,6 +94,8 @@ namespace DogApi
     public class BaseTrickIcon : BaseData
     {
         [MaxLength(50)] public string Name { get; set; } = string.Empty;
+
+        public int PictureID { get; set; }
 
     }
 

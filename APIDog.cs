@@ -60,6 +60,40 @@ namespace DogApi
 
     }
 
+    public class APITrick
+    {
+        public int ID { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string IconFileName { get; set; } = "11111111-1111-1111-1111-111111111111.png";
+        public string Color {  get; set; } = "FFFFFFFF";
+        public double Proficiency { get; set; }
+    }
+
+
+
+
+    public class APITraining
+    {
+        public int ID { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+        public int Repetitions { get; set; }
+        public int ProficiencyCount { get; set; }
+        public string Comment { get; set; } = string.Empty;
+    }
+
+
+    public class APITrickDetail : APITrick
+    {
+        public List<APITraining> Trainings { get; set; } = new();
+        public string VerbalCue { get; set; } = string.Empty;
+        public string VisualCue { get; set; } = string.Empty;
+        public string VerbalRelease { get; set; } = string.Empty;
+        public string VisualRelease { get; set; } = string.Empty;
+        public string Comment { get; set; } = string.Empty;
+    }
+
     public class DTOData
     {
         public int ID { get; set; }

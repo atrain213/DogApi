@@ -74,6 +74,29 @@ namespace DogApi.Controllers
             return Ok(api);
         }
 
+        [HttpGet("trick")]
+        public ActionResult<List<APITrick>> GetTricks()
+        {
+            return Ok(_query.getTricks());
+        }
+
+        [HttpGet("dogtrick/{id}")]
+        public ActionResult<List<APITrick>> GetTricksByDog(int id)
+        {
+            return Ok(_query.getTricksByDog(id));
+        }
+
+        [HttpGet("dogtrick/detail/{id}")]
+        public ActionResult<APITrickDetail> GetDogTrickDetail(int id)
+        {
+            APITrickDetail? api = _query.getTrickDetailbyID(id);
+            if (api == null)
+            {
+                return NotFound();
+            }
+            return Ok(api);
+        }
+
 
 
         [HttpPost("dog")]
