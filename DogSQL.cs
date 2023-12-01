@@ -51,7 +51,7 @@
     }
     public class TrainingTrick : BaseTrainingTrick
     {
-        public Trick Trick { get; set; } = new();
+        public DogTrick Trick { get; set; } = new();
         public Training Training { get; set; } = new();
 
     }

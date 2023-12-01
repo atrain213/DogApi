@@ -17,13 +17,42 @@ namespace DogApi.Controllers
             _query = new QueryDog(_context);
         }
 
-
+        
 
 
         [HttpGet]
         public ActionResult<List<APIDog>> GetDogs()
         {
             return Ok(_query.getDogs());
+        }
+
+        [HttpGet("contact")]
+        public ActionResult<List<APIData>> GetContacts()
+        {
+            return Ok(_query.getAllContacts());
+        }
+
+        [HttpGet("contact/owner")]
+        public ActionResult<List<APIData>> GetOwners()
+        {
+            return Ok(_query.getAllOwners());
+        }
+
+        [HttpGet("contact/trainer")]
+        public ActionResult<List<APIData>> GetTrainer()
+        {
+            return Ok(_query.getAllTrainers());
+        }
+
+        [HttpGet("contact/{id}")]
+        public ActionResult<APIContact> GetContactByID(int id)
+        {
+            APIContact? api = _query.getContactInfo(id);
+            if (api == null)
+            {
+                return NotFound();
+            }
+            return Ok(api);
         }
 
         [HttpGet("breeds")]

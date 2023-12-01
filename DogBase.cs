@@ -29,6 +29,7 @@ namespace DogApi
 
     public class BaseContact : BaseData
     {
+        [MaxLength(50)] public string Name { get;set; } = string.Empty;
         [MaxLength(15)] public string First{ get; set; } = string.Empty;
         [MaxLength(15)] public string Last { get; set; } = string.Empty;
         [MaxLength(15)] public string Mi { get; set; } = string.Empty;

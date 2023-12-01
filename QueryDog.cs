@@ -12,6 +12,49 @@ namespace DogApi
             _context = context;
         }
 
+        public List<APIData> getAllContacts()
+        {
+            return _context.Contacts.Where(w => w.IsActive)
+                .Select(s => new APIData { ID = s.ID, Name = s.Name})
+                .OrderBy(o => o.Name)
+                .ToList();
+        }
+
+        public List<APIData> getAllOwners()
+        {
+            return _context.Owners.Where(w => w.IsActive)
+                .Select(s => new APIData { ID = s.Contact.ID, Name = s.Contact.Name })
+                .OrderBy(o => o.Name)
+                .ToList();
+        }
+
+        public List<APIData> getAllTrainers()
+        {
+            return _context.Trainers.Where(w => w.IsActive)
+                .Select(s => new APIData { ID = s.Contact.ID, Name = s.Contact.Name })
+                .OrderBy(o => o.Name)
+                .ToList();
+        }
+
+        public APIContact? getContactInfo(int id)
+        {
+            return _context.Contacts.Where(w => w.ID == id)
+                .Select(s => new APIContact { 
+                    ID = s.ID,
+                    Name = s.Name,
+                    FName = s.First,
+                    Address1 = s.Address,
+                    Address2 = s.Address2,
+                    CSZ = s.City + ", " + s.State + "  " + s.PostalCode,
+                    Email = s.Email,
+                    Phone = s.Phone,
+                    OwnerID = s.Owners.Select(s => s.ID).FirstOrDefault(),
+                    TrainerID = s.Trainers.Select(s => s.ID).FirstOrDefault()
+                })
+                .FirstOrDefault();
+        }
+
+
         public List<APIDog> getDogs()
         {
             return _context.Dogs.Where(w => w.IsActive)
@@ -172,13 +215,13 @@ namespace DogApi
                         IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
                         Trainings = s.TrainingTricks.Where(w => w.IsActive).Select(x => new APITraining
                                                                                                 {
-                        //                                                                            ID = x.ID,
-                        //                                                                            Date = x.Training.Date,
-                        //                                                                            Comment = x.Training.Comment,
-                        //                                                                            ProficiencyCount = x.ProficiencyCount,
-                        //                                                                            Repetitions = x.Repetitions,
-                        //                                                                            Name = x.Training.Trainer.Contact.First + " " + x.Training.Trainer.Contact.Last
-                                                                                                }).ToList()
+                            ID = x.ID,
+                            Date = x.Training.Date,
+                            Comment = x.Training.Comment,
+                            ProficiencyCount = x.ProficiencyCount,
+                            Repetitions = x.Repetitions,
+                            Name = x.Training.Trainer.Contact.First + " " + x.Training.Trainer.Contact.Last
+                        }).ToList()
 
                     }).FirstOrDefault();
         }

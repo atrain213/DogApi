@@ -2,22 +2,33 @@
 
 namespace DogApi
 {
-    public class APIContact
+    public class APIData
     {
         public int ID { get; set; }
         public string Name { get; set; } = string.Empty;
+        public override string ToString()
+        {
+            return Name;
+        }
     }
-    public class APIDog
+    public class APIContact: APIData
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string FName { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string Address2 { get; set; } = string.Empty;
+        public string CSZ { get; set; } = string.Empty;
+        public string Email {  get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public int OwnerID { get; set; }
+        public int TrainerID { get; set; }
+    }
+    public class APIDog : APIData
+    {
+
     }
 
-    public class APIDogDetail
+    public class APIDogDetail : APIData
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
-
         public string Breed { get; set; } = string.Empty;
 
         public DateTime Birthday { get; set; } = new(2020, 1, 1);
@@ -35,21 +46,13 @@ namespace DogApi
         public List<APIContact> Trainers { get; set; } = new();
     }
 
-    public class APIDogBreeds
+    public class APIDogBreeds : APIData
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public override string ToString()
-        {
-            return Name;
-        }
     }
 
-    public class APIPicture
+    public class APIPicture : APIData
     {
 
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
         public Guid unique_ID { get; set; }
         public int type_ID { get; set; }
 
@@ -60,10 +63,8 @@ namespace DogApi
 
     }
 
-    public class APITrick
+    public class APITrick:APIData
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
         public string IconFileName { get; set; } = "11111111-1111-1111-1111-111111111111.png";
         public string Color {  get; set; } = "FFFFFFFF";
@@ -73,10 +74,8 @@ namespace DogApi
 
 
 
-    public class APITraining
+    public class APITraining:APIData
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
         public DateTime Date { get; set; }
         public int Repetitions { get; set; }
         public int ProficiencyCount { get; set; }
@@ -94,11 +93,8 @@ namespace DogApi
         public string Comment { get; set; } = string.Empty;
     }
 
-    public class DTOData
+    public class DTOData:APIData
     {
-        public int ID { get; set; }
-        public string Name { get; set; } = string.Empty;
-
         public virtual string JsonText()
         {
             return JsonSerializer.Serialize(this);
