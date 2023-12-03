@@ -116,6 +116,28 @@ namespace DogApi
                 .ToList();
         }
 
+        public APIData? getTrainerbyDog(int id)
+        {
+            return _context.DogTrainers.Where(w => w.DogID == id)
+                .Select( s => new APIData()
+                {
+                    ID = s.TrainerID,
+                    Name = s.Trainer.Contact.Name
+                }).FirstOrDefault();
+
+        }
+
+        public APIData? getOwnerbyDog(int id)
+        {
+            return _context.DogOwners.Where(w => w.DogID == id)
+                .Select(s => new APIData()
+                {
+                    ID = s.OwnerID,
+                    Name = s.Owner.Contact.Name
+                }).FirstOrDefault();
+
+        }
+
         public int getLastDogforTrainer(int id)
         {
             return _context.Trainings.Where(w => w.TrainerID == id)
@@ -179,7 +201,8 @@ namespace DogApi
                         Color = s.Category.Color,
                         IconFileName = s.Category.Icon.Icon.unique_ID.ToString().ToLower()+ (s.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
                         Name = s.Name,
-                        Proficiency = 1.0
+                        Level = 1,
+                        Scale = 1
                     }).ToList();
         }
 
@@ -193,7 +216,8 @@ namespace DogApi
                         Color = s.Trick.Category.Color,
                         IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
                         Name = s.Trick.Name,
-                        Proficiency = ((double)s.Proficiency/ (double)s.ProficiencyScale)
+                        Level=s.Proficiency,
+                        Scale=s.ProficiencyScale
                     }).ToList();
         }
 
@@ -211,7 +235,8 @@ namespace DogApi
                         Color = s.Trick.Category.Color,
                         Comment = s.Comment,
                         Name = s.Trick.Name,
-                        Proficiency = s.Proficiency,
+                        Level = s.Proficiency,
+                        Scale = s.ProficiencyScale,
                         IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
                         Trainings = s.TrainingTricks.Where(w => w.IsActive).Select(x => new APITraining
                                                                                                 {
@@ -265,7 +290,6 @@ namespace DogApi
 
         public int savePicture(DTOPicture dto)
         {
-            
             Picture? pic;
             if (dto.ID > 0)
             {
@@ -288,6 +312,67 @@ namespace DogApi
             _context.SaveChanges();
             return pic.ID;
 
+        }
+        public int saveSession2(DTOSession dto)
+        {
+            var x = getDogs();
+            int y =_context.Tricks.Select(s => s.ID).FirstOrDefault();
+            Trick? trk = _context.Tricks.FirstOrDefault();
+            Dog? dog1 = _context.Dogs.FirstOrDefault();
+            return y;
+        }
+
+        public int saveSession(DTOSession dto)
+        {
+            var x = getDogs();
+            Trick? trk = _context.Tricks.FirstOrDefault();
+            Dog? dog1 = _context.Dogs.FirstOrDefault();
+            if (dto.ID == 0) 
+            {
+                Dog? dog = _context.Dogs.FirstOrDefault(f => f.ID == dto.DogId);
+                Trainer? trainer = _context.Trainers.FirstOrDefault(f => f.ID == dto.TrainerID);
+                if (dog == null || trainer == null)
+                {
+                    return -1;
+                }
+                Training trn = new()
+                {
+                    Dog = dog,
+                    Trainer = trainer,
+                    Date = dto.Date,
+                    Duration = dto.Duration,
+                    Comment = dto.Comment,
+                    Mood = dto.Mood,
+                    Weather = dto.Weather,
+                    Location = dto.Location,
+                    TrainingTricks = new(),
+                };
+                foreach (var item in dto.Tricks)
+                {
+                    Trick? trick = _context.Tricks.FirstOrDefault(f => f.ID == item.TrickID);
+                    if (trick == null)
+                    {
+                        return -2;
+                    }
+                    DogTrick? dogTrick = _context.DogTricks.FirstOrDefault(f => f.DogID == dog.ID && f.TrickID == trick.ID);
+                    if(dogTrick == null)
+                    {
+                        return -3;
+                    }
+                    trn.TrainingTricks.Add(new TrainingTrick
+                    {
+                        Trick = dogTrick,
+                        Repetitions = item.Repetitions,
+                        ProficiencyCount = item.ProficiencyCount,
+                        Comment = item.Comment
+                    });
+                    dogTrick.Proficiency = item.Proficiency;
+                }
+                _context.Add(trn);
+                _context.SaveChanges();
+                return trn.ID;
+            }
+            return 0;
         }
     }
 }

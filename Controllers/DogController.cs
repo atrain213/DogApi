@@ -68,6 +68,29 @@ namespace DogApi.Controllers
             return Ok(_query.getDogbyTrainer(id));
         }
 
+        [HttpGet("mytrainer/{id}")]
+        public ActionResult<APIData> GetTrainerByDog(int id)
+        {
+            APIData? api = _query.getTrainerbyDog(id);
+            if (api == null)
+            {
+                return NotFound();
+            }
+            return Ok(api);
+        }
+
+        [HttpGet("myowner/{id}")]
+        public ActionResult<APIData> GetOwnerByDog(int id)
+        {
+            APIData? api = _query.getOwnerbyDog(id);
+            if (api == null)
+            {
+                return NotFound();
+            }
+            return Ok(api);
+        }
+
+
         [HttpGet("trainer/lastdog/{id}")]
         public ActionResult<int> GetLastDogForTrainer(int id)
         {
@@ -143,6 +166,17 @@ namespace DogApi.Controllers
         public ActionResult<int> SavePicture(DTOPicture dto)
         {
             int retval = _query.savePicture(dto);
+            if (retval < 1)
+            {
+                return BadRequest(retval);
+            }
+            return Ok(retval);
+        }
+
+        [HttpPost("session")]
+        public ActionResult<int> SaveSession(DTOSession dto)
+        {
+            int retval = _query.saveSession2(dto);
             if (retval < 1)
             {
                 return BadRequest(retval);
