@@ -4,7 +4,7 @@
     {
         public DogBreed Breed { get; set; } = new();
         public Picture Photo { get; set; } = new();
-        public List<Training> Trainings { get; set; } = new();
+        //public List<Training> Trainings { get; set; } = new();
         public List<DogOwner> Owners { get; set; } = new();
         public List<DogTrainer> Trainers { get; set; } = new();
         public List<DogTrick> Tricks { get; set; } = new();
@@ -29,6 +29,7 @@
     {
         public Dog Dog { get; set; } = new();
         public Trainer Trainer { get; set; } = new();
+        public List<Training> Trainings { get; set; } = new();
     }
     public class Owner : BaseOwner
     {
@@ -45,8 +46,8 @@
     public class Trainer : BaseTrainer
     {
         public List<DogTrainer> Trainers { get; set; } = new();
-        public List<Training> Trainings { get; set; } = new();
-        public List<Trick> Tricks { get; set; } = new();
+        //public List<Training> Trainings { get; set; } = new();
+        //public List<DogTrick> Tricks { get; set; } = new();
         public Contact Contact { get; set; } = new();
     }
     public class TrainingTrick : BaseTrainingTrick
@@ -58,8 +59,7 @@
     public class Training : BaseTraining
     {
         public List<TrainingTrick> TrainingTricks { get; set; } = new();
-        public Dog Dog { get; set; } = new();
-        public Trainer Trainer { get; set; } = new();
+        public DogTrainer DogTrainer { get; set; } = new();
     }
     public class TrickCategory : BaseTrickCategory
     {
@@ -81,9 +81,8 @@
 
     public class Trick : BaseTrick
     {
-        public List<DogTrick> Tricks { get; set; } = new();
+        public List<DogTrick> DogTricks { get; set; } = new();
         public TrickCategory Category { get; set; } = new();
     }
-
 
 }

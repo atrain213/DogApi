@@ -150,6 +150,18 @@ namespace DogApi.Controllers
         }
 
 
+        [HttpGet("dogtrick/details/{id}")]
+        public ActionResult<List<APITrick>> GetTrickDetailByDog(int id)
+        {
+            return Ok(_query.getTrickDetailsByDog(id));
+        }
+
+        [HttpGet("sessions/{id}")]
+        public ActionResult<List<ApiDogTraingHistory>> GetHistory(int id)
+        {
+            return Ok(_query.GetHistorybyDog(id));
+        }
+
 
         [HttpPost("dog")]
         public ActionResult<int> SaveDog(DTODog dto)
@@ -176,13 +188,15 @@ namespace DogApi.Controllers
         [HttpPost("session")]
         public ActionResult<int> SaveSession(DTOSession dto)
         {
-            int retval = _query.saveSession2(dto);
+            int retval = _query.saveSession(dto);
             if (retval < 1)
             {
                 return BadRequest(retval);
             }
             return Ok(retval);
         }
+
+
 
     }
    

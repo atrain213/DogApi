@@ -60,7 +60,7 @@ namespace DogApi
     public class BaseTrainer : BaseData
     {
         public int ContactID { get; set; }
-        public int IntialYear { get; set; }
+        public int InitialYear { get; set; }
         [MaxLength(500)] public string Bio { get; set; } = string.Empty;
 
     }
@@ -77,7 +77,7 @@ namespace DogApi
         public int DogID { get; set; }
         public int TrickID { get; set; }
         public int Proficiency { get; set; }
-        public int ProficiencyScale { get; set; }
+        public int ProficiencyScale { get; set; } = 5;
         [MaxLength(50)] public string VerbalCue { get; set; } = string.Empty;
         [MaxLength(50)] public string VisualCue { get; set; } = string.Empty;
         [MaxLength(50)] public string VerbalRelease { get; set; } = string.Empty;
@@ -127,8 +127,7 @@ namespace DogApi
     public class BaseTraining : BaseData
     {
         public DateTime Date { get; set; }
-        public int DogID { get; set; }
-        public int TrainerID { get; set; }
+        public int DogTrainerID { get; set; }
         [MaxLength(50)] public string Mood { get; set; } = string.Empty;
         public int Duration { get; set; }
         [MaxLength(50)] public string Weather { get; set; } = string.Empty;

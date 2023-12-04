@@ -140,9 +140,9 @@ namespace DogApi
 
         public int getLastDogforTrainer(int id)
         {
-            return _context.Trainings.Where(w => w.TrainerID == id)
+            return _context.Trainings.Where(w => w.DogTrainer.TrainerID == id)
                 .OrderByDescending(o => o.Date)
-                .Select(s => s.DogID)
+                .Select(s => s.DogTrainer.DogID)
                 .FirstOrDefault();
         }
 
@@ -211,7 +211,7 @@ namespace DogApi
             return _context.DogTricks.Where(w => w.DogID == ID)
                     .Select(s => new APITrick
                     {
-                        ID = s.ID,
+                        ID = s.ID,                        
                         Category = s.Trick.Category.Name,
                         Color = s.Trick.Category.Color,
                         IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
@@ -238,18 +238,66 @@ namespace DogApi
                         Level = s.Proficiency,
                         Scale = s.ProficiencyScale,
                         IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
-                        Trainings = s.TrainingTricks.Where(w => w.IsActive).Select(x => new APITraining
-                                                                                                {
+                        Trainings = s.TrainingTricks.Where(w => w.IsActive).Select(x => new APITrickTraining
+                        {
                             ID = x.ID,
                             Date = x.Training.Date,
                             Comment = x.Training.Comment,
                             ProficiencyCount = x.ProficiencyCount,
                             Repetitions = x.Repetitions,
-                            Name = x.Training.Trainer.Contact.First + " " + x.Training.Trainer.Contact.Last
+                            Name = x.Training.DogTrainer.Trainer.Contact.Name
                         }).ToList()
 
                     }).FirstOrDefault();
         }
+
+
+        public List<APITrickDetail> getTrickDetailsByDog(int ID)
+        {
+            return _context.DogTricks.Where(w =>w.IsActive  &&  w.DogID  == ID)
+                    .Select(s => new APITrickDetail
+                    {
+                        ID = s.TrickID,
+                        VerbalCue = s.VerbalCue,
+                        VerbalRelease = s.VerbalRelease,
+                        VisualCue = s.VisualCue,
+                        VisualRelease = s.VisualRelease,
+                        Category = s.Trick.Category.Name,
+                        Color = s.Trick.Category.Color,
+                        Comment = s.Comment,
+                        Name = s.Trick.Name,
+                        Level = s.Proficiency,
+                        Scale = s.ProficiencyScale,
+                        IconFileName = s.Trick.Category.Icon.Icon.unique_ID.ToString().ToLower() + (s.Trick.Category.Icon.Icon.type_ID == 1 ? ".png" : ".jpg"),
+                        Trainings = s.TrainingTricks.Where(w => w.IsActive).Select(x => new APITrickTraining
+                        {
+                            ID = x.ID,
+                            Date = x.Training.Date,
+                            Comment = x.Training.Comment,
+                            ProficiencyCount = x.ProficiencyCount,
+                            Repetitions = x.Repetitions,
+                            Name = x.Training.DogTrainer.Trainer.Contact.Name
+                        }).ToList()
+
+                    }).ToList();
+        }
+
+        public List<ApiDogTraingHistory> GetHistorybyDog(int id)
+        {
+            return _context.Trainings.Where(w => w.IsActive && w.DogTrainer.DogID == id)
+                                .OrderByDescending(o => o.Date)
+                                .Select(s => new ApiDogTraingHistory
+                                {
+                                    ID = s.ID,
+                                    Name = s.Location,
+                                    Date = s.Date,
+                                    Duration = s.Duration,
+                                    Trainer = s.DogTrainer.Trainer.Contact.Name
+                                }).ToList();
+        }
+
+
+
 
         public int saveDog(DTODog dto)
         {
@@ -282,7 +330,59 @@ namespace DogApi
             if(dto.ID == 0)
             {
                 _context.Add(dog);
+                Owner? owner = _context.Owners.FirstOrDefault(f => f.ID == 3);
+                Trainer? trainer = _context.Trainers.FirstOrDefault(f => f.ID == 2);
+                Trick? trick1 = _context.Tricks.FirstOrDefault(f => f.ID == 1);
+                Trick? trick2 = _context.Tricks.FirstOrDefault(f => f.ID == 2);
+                Trick? trick3 = _context.Tricks.FirstOrDefault(f => f.ID == 3);
+                Trick? trick4 = _context.Tricks.FirstOrDefault(f => f.ID == 16);
+                Trick? trick5 = _context.Tricks.FirstOrDefault(f => f.ID == 18);
+                if (trick1 != null && trick2 != null && trick3 != null && trick4 != null && trick5 !=null && trainer != null && owner != null)
+                {
+                    _context.Add(new DogTrick 
+                    {
+                        Dog = dog,
+                        Trick = trick1
+                    });
+
+                    _context.Add(new DogTrick
+                    {
+                        Dog = dog,
+                        Trick = trick2
+                    });
+
+                    _context.Add(new DogTrick
+                    {
+                        Dog = dog,
+                        Trick = trick3
+                    });
+
+                    _context.Add(new DogTrick
+                    {
+                        Dog = dog,
+                        Trick = trick4
+                    });
+
+                    _context.Add(new DogTrick
+                    {
+                        Dog = dog,
+                        Trick = trick5
+                    });
+
+                    _context.Add(new DogTrainer
+                    {
+                        Dog = dog,
+                        Trainer = trainer
+                    });
+
+                    _context.Add(new DogOwner
+                    {
+                        Dog = dog,
+                        Owner = owner
+                    });
+                }
             }
+               
             _context.SaveChanges();
             return dog.ID;
 
@@ -313,32 +413,22 @@ namespace DogApi
             return pic.ID;
 
         }
-        public int saveSession2(DTOSession dto)
-        {
-            var x = getDogs();
-            int y =_context.Tricks.Select(s => s.ID).FirstOrDefault();
-            Trick? trk = _context.Tricks.FirstOrDefault();
-            Dog? dog1 = _context.Dogs.FirstOrDefault();
-            return y;
-        }
 
         public int saveSession(DTOSession dto)
         {
-            var x = getDogs();
-            Trick? trk = _context.Tricks.FirstOrDefault();
-            Dog? dog1 = _context.Dogs.FirstOrDefault();
+            
             if (dto.ID == 0) 
             {
-                Dog? dog = _context.Dogs.FirstOrDefault(f => f.ID == dto.DogId);
-                Trainer? trainer = _context.Trainers.FirstOrDefault(f => f.ID == dto.TrainerID);
-                if (dog == null || trainer == null)
+                DogTrainer? trainer = _context.DogTrainers.FirstOrDefault(f => f.IsActive && f.DogID == dto.DogId && f.TrainerID == dto.TrainerID);
+                //Dog? dog = _context.Dogs.FirstOrDefault(f => f.ID == dto.DogId);
+                //Trainer? trainer = _context.Trainers.FirstOrDefault(f => f.ID == dto.TrainerID);
+                if (trainer == null)
                 {
                     return -1;
                 }
                 Training trn = new()
                 {
-                    Dog = dog,
-                    Trainer = trainer,
+                    DogTrainer= trainer,
                     Date = dto.Date,
                     Duration = dto.Duration,
                     Comment = dto.Comment,
@@ -349,15 +439,10 @@ namespace DogApi
                 };
                 foreach (var item in dto.Tricks)
                 {
-                    Trick? trick = _context.Tricks.FirstOrDefault(f => f.ID == item.TrickID);
-                    if (trick == null)
-                    {
-                        return -2;
-                    }
-                    DogTrick? dogTrick = _context.DogTricks.FirstOrDefault(f => f.DogID == dog.ID && f.TrickID == trick.ID);
+                    DogTrick? dogTrick = _context.DogTricks.FirstOrDefault(f => f.ID == item.TrickID);
                     if(dogTrick == null)
                     {
-                        return -3;
+                        return -2;
                     }
                     trn.TrainingTricks.Add(new TrainingTrick
                     {

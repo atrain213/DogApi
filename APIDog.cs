@@ -75,7 +75,7 @@ namespace DogApi
 
 
 
-    public class APITraining : APIData
+    public class APITrickTraining : APIData
     {
         public DateTime Date { get; set; }
         public int Repetitions { get; set; }
@@ -86,13 +86,23 @@ namespace DogApi
 
     public class APITrickDetail : APITrick
     {
-        public List<APITraining> Trainings { get; set; } = new();
+        public List<APITrickTraining> Trainings { get; set; } = new();
         public string VerbalCue { get; set; } = string.Empty;
         public string VisualCue { get; set; } = string.Empty;
         public string VerbalRelease { get; set; } = string.Empty;
         public string VisualRelease { get; set; } = string.Empty;
         public string Comment { get; set; } = string.Empty;
     }
+
+
+    public class ApiDogTraingHistory : APIData
+    {
+        public DateTime Date { get; set; }
+        public int Duration { get; set; }
+        public string Trainer { get; set; } = string.Empty;
+    }
+
+
 
     public class DTOData : APIData
     {
@@ -165,5 +175,6 @@ namespace DogApi
             return JsonSerializer.Serialize(this);
         }
     }
+
 
 }
