@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace DogApi
@@ -459,5 +460,137 @@ namespace DogApi
             }
             return 0;
         }
+
+        //VUTC DATA
+
+        public List<APIPersonnel> GetPersonnel()
+        {
+            return _context.Personnel.Where(w => w.IsActive)
+                .Select(s => new APIPersonnel 
+                { 
+                    ID = s.ID, 
+                    First = s.First,
+                    Last = s.Last,
+                    Name = s.First + " " + s.Last,
+                    AHT = s.AHT,
+                    VHT = s.VHT,
+                    LHT = s.LHT,
+                    Senior = s.Senior,
+                    BannerID = s.BannerID,
+                    PWD = s.Pwd,
+                    Email = s.Email,
+                    EmerContact = s.EmerContact,
+                    EmerPhone = s.EmerPhone,
+                    GradYear = s.GradYear,
+                    Phone = s.Phone,
+                    Residence = s.Residence,
+
+                }).OrderBy(o => o.Name)
+                .ToList();
+        }
+
+        public List<APIEventBasic> getEvents()
+        {
+            return _context.Events.Where(w => w.IsActive)
+                .Select(s => new APIEventBasic 
+                { 
+                    ID = s.ID,
+                    Date = s.Date,
+                    EventName = s.EventName,
+                    StaffCount = s.StaffCount,
+                    CurrentSignUp = s.CurrentSignUp,
+                    TimeFinish = s.TimeFinish,
+                    TimeLoadIn = s.TimeLoadIn,
+                    TimeStart  = s.TimeStart,
+                    
+                }).OrderBy(o => o.Date) .ToList();
+        }
+
+        public APIEvent? getEventbyID(int id)
+        {
+            return _context.Events.Where(w => w.ID == id)
+                .Select(s => new APIEvent()
+                {
+                    ID = s.ID,
+                    Date = s.Date,
+                    EventName = s.EventName,
+                    StaffCount = s.StaffCount,
+                    CurrentSignUp = s.CurrentSignUp,
+                    Description = s.Description,
+                    Location = s.Location,
+                    EventNeeds =s.EventNeeds,
+                    Name = s.Name,
+                    Email = s.Email,
+                    AdvisorName = s.AdvisorName,
+                    AdvisorEmail = s.AdvisorEmail,
+                    Org = s.Org,
+                    Phone = s.Phone,
+                    TimeFinish = s.TimeFinish,
+                    TimeLoadIn = s.TimeLoadIn,
+                    TimeSoundCheck = s.TimeSoundCheck,
+                    TimeStart = s.TimeStart,
+                    Notes = s.Notes,
+                    NotesHT = s.NotesHT,
+                    Staff = s.EventSignUps.Where(w => w.IsActive).Select(x => new APIData { ID = x.Personnel.ID, Name = (x.Personnel.First + " " + x.Personnel.Last)}).OrderBy(o => o.Name).ToList(),
+                    Packages = s.Packages.Where(w => w.IsActive).Select(x => new APIData { ID = x.Package.ID, Name = x.Package.Name }).OrderBy(o => o.Name).ToList(),
+                }).FirstOrDefault();
+
+        }
+
+        public APIPersonnel? GetPersonnelbyID(int id)
+        {
+            return _context.Personnel.Where(w => w.ID == id)
+                   .Select(s => new APIPersonnel()
+                   {
+                       ID = s.ID,
+                       Email = s.Email,
+                       EmerContact = s.EmerContact,
+                       BannerID = s.BannerID,
+                       PWD = s.Pwd,
+                       AHT = s.AHT,
+                       EmerPhone = s.EmerPhone,
+                       First = s.First,
+                       Last = s.Last,
+                       Name = s.First + " " + s.Last,
+                       GradYear = s.GradYear,
+                       LHT = s.LHT,
+                       Phone = s.Phone,
+                       Residence = s.Residence,
+                       Senior = s.Senior,
+                       VHT = s.VHT,
+                   }).FirstOrDefault();
+        }
+
+        public int PostSignUp(int evtID, int pid)
+        {
+            Events? evt = _context.Events.FirstOrDefault(f => f.ID == evtID);
+            Personnel? pers = _context.Personnel.FirstOrDefault(f => f.ID == pid);
+            if (evt == null || pers == null)
+            {
+                return -1;
+            }
+            EventSignUp esu = new() { Event = evt, Personnel = pers };
+            _context.Add(esu);
+            evt.CurrentSignUp++;
+            _context.SaveChanges();
+            return esu.ID;
+        }
+
+        public int PostAddPackage(int evtID, int pid)
+        {
+            Events? evt = _context.Events.FirstOrDefault(f => f.ID == evtID);
+            Pricing? pack = _context.Pricings.FirstOrDefault(f => f.ID == pid);
+            if (evt == null || pack == null)
+            {
+                return -1;
+            }
+            EventPackages esu = new() { Event = evt, Package = pack };
+            _context.Add(esu);
+            _context.SaveChanges();
+            return esu.ID;
+        }
+
+
     }
+
 }

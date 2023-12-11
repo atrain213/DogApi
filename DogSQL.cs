@@ -85,4 +85,39 @@
         public TrickCategory Category { get; set; } = new();
     }
 
+
+    //VUTC DATA
+    public class Events : BaseEvents
+    {
+        public List<EventPackages> Packages { get; set; } = new();
+        public List<EventSignUp> EventSignUps { get; set; } = new();
+
+    }
+
+    public class EventSignUp : BaseEventSignUp
+    {
+        public Personnel Personnel { get; set; } = new();
+        public Events Event { get; set; } = new();
+    }
+
+    public class EventPackages : BaseEventPackages
+    {
+        public Events Event { get; set; } = new(); 
+        public Pricing Package { get; set; } = new();
+
+    }
+
+    public class Personnel : BasePersonnel
+    {
+        public List<EventSignUp> EventSignUps { get; set; } = new();
+
+    }
+
+    public class Pricing : BasePricing
+    {
+        //public Events Events { get; set; } = new();
+        public List<EventPackages> EventPackages { get; set; } = new(); 
+
+    }
+
 }

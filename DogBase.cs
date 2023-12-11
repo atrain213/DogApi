@@ -135,6 +135,69 @@ namespace DogApi
         [MaxLength(500)] public string Comment { get; set; } = string.Empty;
     }
 
+    //VUTC DATA
+    public class BaseEvents : BaseData
+    {
+        [MaxLength(80)] public string EventName { get; set; } = string.Empty;
+        [MaxLength(80)] public string Org { get; set; } = string.Empty;
+        [MaxLength(80)] public string Name { get; set; } = string.Empty;
+        [MaxLength(16)] public string Phone { get; set; } = string.Empty;
+        [MaxLength(50)] public string Email { get; set; } = string.Empty;
+        [MaxLength(50)] public string AdvisorName { get; set; } = string.Empty;
+        [MaxLength(50)] public string AdvisorEmail { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+        public DateTime TimeStart {  get; set; }
+        public DateTime TimeFinish { get; set; }
+        public DateTime TimeLoadIn { get; set; }
+        public DateTime TimeSoundCheck { get; set; }
+        [MaxLength(50)] public string Location { get; set; } = string.Empty;
+        [MaxLength(1000)] public string Description { get; set; } = string.Empty;
+        [MaxLength(500)] public string Notes { get; set; } = string.Empty;
+        [MaxLength(500)] public string NotesHT { get; set; } = string.Empty;
+        [MaxLength(500)] public string EventNeeds { get; set; } = string.Empty;
+        public int StaffCount { get; set; }
+        public int CurrentSignUp {  get; set; }
+
+    }
+    public class BaseEventSignUp : BaseData
+    {
+        public int EventID { get; set; }
+        public int PersonnelID { get; set; }
+    }
+
+    public class BaseEventPackages : BaseData
+    {
+        public int EventID { get; set; }
+        public int PackageID { get; set; }
+    }
+
+    public class BasePersonnel : BaseData
+    {
+        [MaxLength(50)] public string First { get; set; } = string.Empty;
+        [MaxLength(50)] public string Last { get; set; } = string.Empty;
+        [MaxLength(50)] public string Email { get; set; } = string.Empty;
+        [MaxLength(50)] public string Phone { get; set; } = string.Empty;
+        public int GradYear { get; set; }
+        [MaxLength(50)] public string BannerID { get; set; } = string.Empty;
+        [MaxLength(50)] public string Residence { get; set; } = string.Empty;
+        [MaxLength(50)] public string EmerContact { get; set; } = string.Empty;
+        [MaxLength(50)] public string EmerPhone { get; set; } = string.Empty;
+        [MaxLength(50)] public string Pwd { get; set; } = string.Empty;
+        public bool AHT { get; set; }
+        public bool LHT { get; set; }
+        public bool VHT { get; set; }
+        public bool Senior { get; set;}
+    }
+
+    public class BasePricing : BaseData
+    {
+        [MaxLength(50)] public string Name { get; set; } = string.Empty;
+        public int current_price { get; set; }
+        [MaxLength(10)] public string Type { get; set; } = string.Empty;
+        [MaxLength(800)] public string Description { get; set; } = string.Empty;
+        public DateTime TimeStamp_Column { get; set; }
+    }
+
 
 
 }

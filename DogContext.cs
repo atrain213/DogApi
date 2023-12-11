@@ -20,12 +20,23 @@ namespace DogApi
         public DbSet<Trick> Tricks  { get; set; }
         public DbSet<DogTrick> DogTricks { get; set; }
         public DbSet<DogBreed> DogBreeds { get; set; }
+         
+        //VUTC DATA
+
+        public DbSet<Events> Events { get; set; }
+        public DbSet<EventSignUp> EventsSignUp { get; set; }
+        public DbSet<EventPackages> EventsPackages { get; set; }
+        public DbSet<Personnel> Personnel { get; set; }
+        public DbSet<Pricing> Pricings { get; set; }
+
+
         
 
         public DogContext(DbContextOptions<DogContext> options) : base(options) 
         {
 
         }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -51,6 +62,13 @@ namespace DogApi
             modelBuilder.Entity<Trick>().ToTable("Trick");
             modelBuilder.Entity<DogTrick>().ToTable("Dog Trick");
             modelBuilder.Entity<DogBreed>().ToTable("Dog Breeds");
+            //VUTC DATA
+
+            modelBuilder.Entity<Events>().ToTable("VUTC_Events");
+            modelBuilder.Entity<EventSignUp>().ToTable("VUTC_EventSignUp");
+            modelBuilder.Entity<EventPackages>().ToTable("VUTC_EventPackages");
+            modelBuilder.Entity<Personnel>().ToTable("VUTC_Personnel");
+            modelBuilder.Entity<Pricing>().ToTable("VUTC_Pricing");
 
 
         }

@@ -176,5 +176,75 @@ namespace DogApi
         }
     }
 
+    //VUTC DATA
 
+    public class APIEventBasic : APIData
+    {
+        public string EventName { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+        public int StaffCount { get; set; }
+        public DateTime TimeStart { get; set; }
+        public DateTime TimeFinish { get; set; }
+        public DateTime TimeLoadIn { get; set; }
+        public int CurrentSignUp { get; set; }
+    }
+    public class APIEvent : APIData
+    {
+        public string EventName { get; set; } = string.Empty;
+        public string Org { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string AdvisorName { get; set; } = string.Empty;
+        public string AdvisorEmail { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+        public DateTime TimeStart { get; set; }
+        public DateTime TimeFinish { get; set; }
+        public DateTime TimeLoadIn { get; set; }
+        public DateTime TimeSoundCheck { get; set; }
+        public string Location { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
+        public string NotesHT { get; set; } = string.Empty;
+        public string EventNeeds { get; set; } = string.Empty;
+        public int StaffCount { get; set; }
+        public int CurrentSignUp { get; set; }
+        public List<APIData> Staff { get; set; } = new();
+        public List<APIData> Packages { get; set; } = new();
+    }
+
+    public class APIEventSignUp : APIData
+    {
+        public int EventID { get; set; }
+        public int PersonnelID { get; set; }
+    }
+    public class APIEventPackages : APIData
+    {
+        public int EventID { get; set; }
+        public int PackageID { get; set; }
+    }
+
+    public class APIPersonnel : APIData
+    {
+        public string First { get; set; } = string.Empty;
+        public string Last { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public int GradYear { get; set; }
+        public string BannerID { get; set; } = string.Empty;
+        public string Residence { get; set; } = string.Empty;
+        public string EmerContact { get; set; } = string.Empty;
+        public string EmerPhone { get; set; } = string.Empty;
+        public string PWD { get; set; } = string.Empty;
+        public bool AHT {  get; set; }
+        public bool LHT { get; set; }
+        public bool VHT { get; set; }
+        public bool Senior { get; set; }
+    }
+
+    public class DTOSignUP : DTOData
+    {
+        public int PersonnelID { get; set; }
+        public int EventID { get; set; }
+
+    }
 }
